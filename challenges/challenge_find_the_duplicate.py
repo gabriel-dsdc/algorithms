@@ -1,32 +1,27 @@
-from typing import Literal
+from typing import List, Literal
 
 
-def binary_search(lst: list, target) -> int:
-    start = 0
-    end = len(lst) - 1
+def find_duplicate(lst: List[int]) -> int | Literal[False]:
+    if any(type(x) != int or x < 1 for x in lst):
+        return False
 
-    while start <= end:
+    lst.sort()
+    start, end = 0, len(lst) - 1
+
+    while len(lst) > 1:
         mid = (start + end) // 2
+        first_half = lst[start : mid + 1]
+        second_half = lst[mid + 1 : end + 1]
 
-        if lst[mid] == target:
-            return mid
+        if first_half[-1] == second_half[0]:
+            return first_half[-1]
 
-        if target < lst[mid]:
-            end = mid - 1
-        else:
+        if len(set(first_half)) < len(first_half):
+            end = mid
+            continue
+
+        if len(set(second_half)) < len(second_half):
             start = mid + 1
-    return -1
-
-
-def find_duplicate(nums: list[int]) -> int | Literal[False]:
-    nums.sort()
-    end = len(nums) - 1
-    for num in nums:
-        if type(num) != int or num < 1:
-            return False
-
-        num_index = binary_search(nums, num)
-        if num_index < end:
-            if num == nums[num_index + 1] or num == nums[num_index - 1]:
-                return num
+            continue
+        return False
     return False
